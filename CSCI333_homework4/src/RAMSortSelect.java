@@ -17,17 +17,20 @@ public class RAMSortSelect {
 		System.out.println(Arrays.toString(B));
 		
 		int num = RM.randomzedQuickselect(A, 0, A.length-1, 4);
-		System.out.println(num);
+		System.out.println("The number is at index:"  + num);
 		
 		
 	}
 	
 	private int[] countingSort(int[] A, int[] B, int k) {
+		//creates an array (array C) of length k+1
 		int[] C = new int[k+1];
+		//sets the value of every item in array c to 0
 		for(int i = 0; i < C.length; i++) {
 			C[i] = 0;
 		}
 		//System.out.println(Arrays.toString(C));
+		//
 		for(int i = 0; i < A.length; i++) {
 			C[A[i]]++;
 		}
@@ -49,19 +52,24 @@ public class RAMSortSelect {
 	private int randomzedQuickselect(int[] A, int p, int r, int i) {
 		int total = 0;
 		if (p == r) {
-				total = A[p];
+			total = p;
 		}
+		//picks random number between p and r
 		int z = randomInt(p, r);
+		System.out.println(z);
+		//swaps A[z] with A[r]
 		swap(A, r , z);
 		int q = partition(A, p, r);
+		System.out.println(Arrays.toString(A));
 		int k = q - p;
 		if(i == k) {
-			total = A[q];
+			total = q;
 		}else if(i < k) {
 			total = randomzedQuickselect(A, p, q-1, i);
 		}else {
 			total = randomzedQuickselect(A, q+1, r, i-k);
 		}
+		
 		return total;
 	}
 	
@@ -73,9 +81,9 @@ public class RAMSortSelect {
 	}
 	
 	private int randomInt(int p, int r) {
-		Random rand = new Random();
-		int num = (rand.nextInt(r-1) + p) - 1;
-		System.out.println(num);
+		//Random rand = new Random();
+		int num = (int)Math.floor(Math.random()*(r-p+ 1)+p);
+		//System.out.println("num = " + ((r-p + 1)+p) );
 		return num;
 	}
 	
