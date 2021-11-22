@@ -1,5 +1,6 @@
 import java.util.Arrays;
 import java.util.Random;
+import java.util.Scanner;
 
 /**
  * 
@@ -8,20 +9,63 @@ import java.util.Random;
  */
 public class RAMSortSelect {
 	
+	/**
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
-		int[] A = new int[] {4,5,2,3,7,2,8,1};
-		int[] B = new int[A.length];
-		System.out.println(Arrays.toString(A));
-		RAMSortSelect RM = new RAMSortSelect();
-		RM.countingSort(A, B , 8);
-		System.out.println(Arrays.toString(B));
 		
-		int num = RM.RQS(A, 4);
-		System.out.println("The number is at index:"  + num);
+		for(int i = 0; i < 5; i++) {
+			RAMSortSelect RM = new RAMSortSelect();
+			System.out.println("Test " + (i + 1) + "\n");
+			System.out.println("bellow is your random array:");
+			//gets the random length of the array
+			int randLength = (int)Math.floor(Math.random()*(20-10+1)+10);
+			int A[] = new int[randLength];
+			//fills the array with random but increasing numbers
+			for(int j = 0; j < randLength; j++) {
+				A[j] = (int)Math.floor(Math.random()*(10-0+1)+0);
+			}
+			System.out.println(Arrays.toString(A) + "\n");
+			int[] B = new int[A.length];
+			
+			Scanner Obj = new Scanner(System.in);
+			
+			RM.countingSort(A, B , A.length);
+			System.out.println("After Counting Sort  ");
+			System.out.println(Arrays.toString(B) + "\n");
+
+			
+//==================================randomzedQuickselect========================================================
+			
+			int findIndex = -1;
+			System.out.println("please enter an index bellow (must be between 0 and " + A.length + ")");
+			
+			while(findIndex > A.length-1 || findIndex < 0) {
+				findIndex = Obj.nextInt();
+				if(findIndex > A.length-1) {
+					System.out.println("sorry the array is not long enouph to contain that index");
+				}else if(findIndex < 0) {
+					System.out.println("sorry the index cannot be smaller than 0");
+				}
+				
+			}
+			
+			int num = RM.RQS(A, findIndex);
+			System.out.println("The number is at index " + findIndex + " is "  + num + "\n");
+		}
 		
-		
+		System.out.println();
+
 	}
 	
+	/**
+	 * 
+	 * @param A
+	 * @param B
+	 * @param k
+	 * @return
+	 */
 	private int[] countingSort(int[] A, int[] B, int k) {
 		//creates an array (array C) of length k+1
 		int[] C = new int[k+1];
@@ -49,36 +93,53 @@ public class RAMSortSelect {
 		return B;
 	}
 	
+	/**
+	 * 
+	 * @param A
+	 * @param i
+	 * @return
+	 */
 	public int RQS(int[] A, int i) {
 		int B[] = Arrays.copyOf(A, A.length);
 		int total = randomzedQuickselect(B, 0, B.length-1, i);
 		return total;
 	}
 	
+	/**
+	 * 
+	 * @param A
+	 * @param p
+	 * @param r
+	 * @param i
+	 * @return
+	 */
 	private int randomzedQuickselect(int[] A, int p, int r, int i) {
-		int total = 0;
 		if (p == r) {
-			total = A[p];
+			return A[p];
 		}
 		//picks random number between p and r
 		//System.out.println("p = " + p + "r = " + r);
 		int z = randomInt(p, r);
-		//System.out.println(z);
 		//swaps A[z] with A[r]
 		swap(A, r , z);
 		int q = partition(A, p, r);
-		int k = q - p;
+		int k = q - p + 1;
 		if(i == k) {
-			total = A[q];
+			return A[q];
 		}else if(i < k) {
-			total = randomzedQuickselect(A, p, q-1, i);
+			return randomzedQuickselect(A, p, q-1, i);
 		}else {
-			total = randomzedQuickselect(A, q+1, r, i-k);
+			return randomzedQuickselect(A, q+1, r, i-k);
 		}
 		
-		return total;
 	}
 	
+	/**
+	 * 
+	 * @param A
+	 * @param z
+	 * @param r
+	 */
 	private void swap(int[] A, int z, int r) {
 		int temp = A[z];
 		A[z] = A[r];
@@ -86,26 +147,35 @@ public class RAMSortSelect {
 		//return A;
 	}
 	
+	/**
+	 * 
+	 * @param p
+	 * @param r
+	 * @return
+	 */
 	private int randomInt(int p, int r) {
-		//Random rand = new Random();
-		int min = p;
-		int max = r;
-		int num = (int)Math.floor(Math.random()*(max-min+ 1)+min);
-		//System.out.println("num = " + ((r-p + 1)+p) );
+		int num = (int)Math.floor(Math.random()*(r-p+ 1)+p);
 		return num;
 	}
 	
+	/**
+	 * 
+	 * @param A
+	 * @param p
+	 * @param r
+	 * @return
+	 */
 	private int partition(int[] A, int p, int r) {
 		int x = A[r];
 		int i = p - 1;
-		for(int j = p; j < r-1; j++) {
+		for(int j = p; j < r; j++) {
+		
 			if(A[j] <= x) {
 				i = i + 1;
 				swap(A, i,j);
 			}
 		}
 		swap(A, i+1,r);
-		//System.out.println(i);
 
 		return i+1;
 	}
