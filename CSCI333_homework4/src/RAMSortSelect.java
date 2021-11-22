@@ -16,7 +16,7 @@ public class RAMSortSelect {
 		RM.countingSort(A, B , 8);
 		System.out.println(Arrays.toString(B));
 		
-		int num = RM.randomzedQuickselect(A, 0, A.length-1, 4);
+		int num = RM.RQS(A, 4);
 		System.out.println("The number is at index:"  + num);
 		
 		
@@ -49,21 +49,27 @@ public class RAMSortSelect {
 		return B;
 	}
 	
+	public int RQS(int[] A, int i) {
+		int B[] = Arrays.copyOf(A, A.length);
+		int total = randomzedQuickselect(B, 0, B.length-1, i);
+		return total;
+	}
+	
 	private int randomzedQuickselect(int[] A, int p, int r, int i) {
 		int total = 0;
 		if (p == r) {
-			total = p;
+			total = A[p];
 		}
 		//picks random number between p and r
+		//System.out.println("p = " + p + "r = " + r);
 		int z = randomInt(p, r);
-		System.out.println(z);
+		//System.out.println(z);
 		//swaps A[z] with A[r]
 		swap(A, r , z);
 		int q = partition(A, p, r);
-		System.out.println(Arrays.toString(A));
 		int k = q - p;
 		if(i == k) {
-			total = q;
+			total = A[q];
 		}else if(i < k) {
 			total = randomzedQuickselect(A, p, q-1, i);
 		}else {
@@ -73,16 +79,18 @@ public class RAMSortSelect {
 		return total;
 	}
 	
-	private void swap(int[] A, int x, int y) {
-		int temp = A[x];
-		A[x] = A[y];
-		A[y] = temp;
+	private void swap(int[] A, int z, int r) {
+		int temp = A[z];
+		A[z] = A[r];
+		A[r] = temp;
 		//return A;
 	}
 	
 	private int randomInt(int p, int r) {
 		//Random rand = new Random();
-		int num = (int)Math.floor(Math.random()*(r-p+ 1)+p);
+		int min = p;
+		int max = r;
+		int num = (int)Math.floor(Math.random()*(max-min+ 1)+min);
 		//System.out.println("num = " + ((r-p + 1)+p) );
 		return num;
 	}
@@ -90,13 +98,15 @@ public class RAMSortSelect {
 	private int partition(int[] A, int p, int r) {
 		int x = A[r];
 		int i = p - 1;
-		for(int j = p; j < r; j++) {
+		for(int j = p; j < r-1; j++) {
 			if(A[j] <= x) {
 				i = i + 1;
 				swap(A, i,j);
 			}
 		}
 		swap(A, i+1,r);
+		//System.out.println(i);
+
 		return i+1;
 	}
 	
